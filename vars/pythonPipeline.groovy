@@ -5,9 +5,11 @@ def call() {
     }
   }
 
-  docker.image(pipelineCfg()['deployToolImage'].inside {
-    stage('Deploy') {
-      sh pipelineCfg()['deployCommand']
+  if (env.BRANCH_NAME == 'master') {
+    docker.image(pipelineCfg()['deployToolImage'].inside {
+      stage('Deploy') {
+        sh pipelineCfg()['deployCommand']
+      }
     }
   }
 }

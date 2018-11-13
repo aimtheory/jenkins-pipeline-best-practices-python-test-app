@@ -4,8 +4,8 @@ def call() {
       checkout scm
     }
     def p = pipelineCfg()
-    
-    docker.image('python').inside {
+
+    docker.image('python').inside('pip install') {
       stage('Test') {
         sh p.testCommand
       }

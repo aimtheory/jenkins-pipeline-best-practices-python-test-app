@@ -1,14 +1,15 @@
 def call() {
-  docker.image(pipelineCfg()['pipelineType']).inside {
+  def p = pipelineCfg()
+  docker.image(p.type).inside {
     stage('Test') {
-      sh pipelineCfg()['testCommand']
+      sh p.testCommand
     }
   }
 
-  if (env.BRANCH_NAME == 'master') {
-    docker.image(pipelineCfg()['deployToolImage'].inside {
+  if (env.BRANCH_NAME == 'master' && p.deployUponTestSuccess == true) {
+    docker.image(p.deployToolImage).inside {
       stage('Deploy') {
-        sh pipelineCfg()['deployCommand']
+        sh "echo ${p.deployCommand} ${p.deployEnvironment}"
       }
     }
   }

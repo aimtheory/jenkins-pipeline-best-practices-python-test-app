@@ -1,5 +1,10 @@
 def call() {
   def p = pipelineCfg()
+  
+  stage('Checkout') {
+    checkout scm
+  }
+
   docker.image(p.type).inside {
     stage('Test') {
       sh p.testCommand
